@@ -5,13 +5,14 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatCardModule} from '@angular/material/card';
+import { MatCardModule } from '@angular/material/card';
 import { FormControl, FormGroup } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { CrudService } from '../shared/crud/crud.service';
-import { AuthService } from '../shared/auth/auth.service';
+import { CrudService } from '../shared/services/crud/crud.service';
+import { AuthService } from '../shared/services/auth/auth.service';
+import { Subscription } from 'rxjs';
 
 
 @Component({
@@ -36,11 +37,25 @@ export class LoginComponent implements OnInit {
   username: string = '';
   password: string = '';
   isLoggedIn: boolean = false;
+  private authenticatedSubscription: Subscription | undefined;
   Locks: any = [];
 
-  constructor(public crudService: CrudService, public authService: AuthService) {}
+  constructor(
+    public crudService: CrudService,
+    public authService: AuthService
+  ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.authenticatedSubscription = this.authService.authenticated$.subscribe(
+      (auth) => {
+        this.isLoggedIn = auth;
+      }
+    );
+  }
+
+  ngOnDestroy() {
+    this.authenticatedSubscription!.unsubscribe();
+  }
 
   fetchData() {
     console.log(this.username, this.password);
@@ -60,6 +75,8 @@ export class LoginComponent implements OnInit {
     //res.subscribe((res: any) => {
     //  console.log(res);
     //});
-    this.authService.loginWithCredentials(this.username, this.password).subscribe(res => console.log("worked: " + res))
+    this.authService
+      .loginWithCredentials(this.username, this.password)
+      .subscribe((res) => {});
   }
 }

@@ -6,8 +6,10 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { HttpClientModule } from '@angular/common/http';
-import { AuthService } from './shared/auth/auth.service';
+import { AuthService } from './shared/services/auth/auth.service';
 import { OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
+
 
 @Component({
   selector: 'app-root',
@@ -27,13 +29,22 @@ import { OnInit } from '@angular/core';
 export class AppComponent implements OnInit {
   title = 'ShareABike-Admin';
   isLoggedIn = false;
+  private authenticatedSubscription: Subscription | undefined;
+  tTest = '';
 
   constructor(private authService: AuthService) {}
 
   ngOnInit() {
+    this.authenticatedSubscription = this.authService.authenticated$.subscribe(
+      (auth) => {
+        this.isLoggedIn = auth;
+      }
+    );
     this.authService.isLoggedIn().subscribe((isValid) => {
-      this.isLoggedIn = isValid;
-      console.log('Is valid: ' + isValid);
     });
+  }
+
+  ngOnDestroy() {
+    this.authenticatedSubscription!.unsubscribe();
   }
 }

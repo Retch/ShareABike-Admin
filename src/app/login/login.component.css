@@ -1,0 +1,36 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.wrapper {
+  min-height: 100vh;
+  min-width: 100vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.form-title {
+  margin-top: 1rem;
+  text-indent: 1rem;
+}
+
+.form-outer {
+  min-width: 20rem;
+  width: 35vw;
+}
+
+.form-inner {
+  margin-top: 1rem;
+}
+
+.form-input-field {
+  width: 100%;
+}
+
+.form-login-button {
+  margin-left: auto;
+  margin-right: 0.5rem;
+}

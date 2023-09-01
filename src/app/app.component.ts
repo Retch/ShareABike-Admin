@@ -9,6 +9,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { AuthService } from './shared/services/auth/auth.service';
 import { OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { ListComponent } from './list/list.component';
 
 
 @Component({
@@ -19,6 +20,7 @@ import { Subscription } from 'rxjs';
     HttpClientModule,
     RouterOutlet,
     LoginComponent,
+    ListComponent,
     MatIconModule,
     MatToolbarModule,
     MatButtonModule,
@@ -30,7 +32,6 @@ export class AppComponent implements OnInit {
   title = 'ShareABike-Admin';
   isLoggedIn = false;
   private authenticatedSubscription: Subscription | undefined;
-  tTest = '';
 
   constructor(private authService: AuthService) {}
 

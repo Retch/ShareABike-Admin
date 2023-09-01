@@ -4,7 +4,6 @@
       <mat-icon>menu</mat-icon>
     </button>
     <span>My App</span>
-    {{tTest}}
     <span class="example-spacer"></span>
     <div *ngIf="isLoggedIn">
       <button mat-icon-button class="example-icon favorite-icon" aria-label="Example icon-button with heart icon">
@@ -17,6 +16,9 @@
   </mat-toolbar>
 </div>
 
-<div *ngIf="!isLoggedIn">
+<div *ngIf="!isLoggedIn; else elseBlock">
   <app-login></app-login>
 </div>
+<ng-template #elseBlock>
+  <app-list></app-list>
+</ng-template>

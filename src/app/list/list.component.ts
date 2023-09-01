@@ -38,7 +38,7 @@ import { timeStampToDateString } from '../shared/utils/timeUtil';
 export class ListComponent implements OnInit {
   locks: Lock[] = [];
   private lockSubscription: Subscription | undefined;
-  columnsToDisplay = ['id', 'deviceId', 'isLocked', 'battery', 'cellular', 'lastContact'];
+  columnsToDisplay = ['id', 'deviceId', 'isLocked', 'battery', 'cellular', 'lastContact', 'gps'];
   columnsToDisplayWithExpand = [...this.columnsToDisplay, 'expand'];
   expandedElement: Lock | undefined;
 

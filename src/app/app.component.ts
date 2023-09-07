@@ -10,6 +10,7 @@ import { AuthService } from './shared/services/auth/auth.service';
 import { OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { ListComponent } from './list/list.component';
+import { MapComponent } from './map/map.component';
 
 
 @Component({
@@ -24,6 +25,7 @@ import { ListComponent } from './list/list.component';
     MatIconModule,
     MatToolbarModule,
     MatButtonModule,
+    MapComponent
   ],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],

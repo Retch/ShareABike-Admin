@@ -5,11 +5,13 @@ export interface Lock {
   isLocked: boolean | undefined;
   lockTypeDescription: string | undefined;
   isConnectedToAdapter: boolean | undefined;
+  lastEvent: string | undefined;
+  lastEventUtcTimestamp: number | undefined;
   lastContactUtcTimestamp: number | undefined;
   batteryPercentage: number | undefined;
   cellularSignalQualityPercentage: number | undefined;
   noGps: boolean | undefined;
-  lastpositionTimeUtcTimestamp: number | undefined;
+  lastPositionTimeUtcTimestamp: number | undefined;
   satellites: number | undefined;
   latitudeDegrees: number | undefined;
   longitudeDegrees: number | undefined;

@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHandler, HttpHeaders, HttpParams, HttpResponse } from '@angular/common/http';
 import { BehaviorSubject, Observable, catchError, of, switchMap } from 'rxjs';
 import { setJwtInSessionStorage, getJwtRequestOptions } from './jwtHelper';
-import { getRefreshTokenFromCookie } from './cookieHelper';
 import { environment } from '../../../../../environment';
 
 
@@ -58,12 +57,8 @@ export class AuthService {
   isLoggedIn(): Observable<boolean> {
     return new Observable<boolean>((observer) => {
       const checkOptions = getJwtRequestOptions();
-      const refreshToken = getRefreshTokenFromCookie();
       const refreshOptions = {
         observe: 'response' as const,
-        headers: new HttpHeaders({
-          'Content-Type': 'application/x-www-form-urlencoded',
-        }),
         withCredentials: true,
       };
       if (checkOptions != null) {
@@ -79,48 +74,37 @@ export class AuthService {
               observer.next(true);
               observer.complete();
               this.authenticatedSource.next(true);
-            } else {
-              if (refreshToken != null) {
-                const body = new HttpParams().set(
-                  'refresh_token',
-                  refreshToken
-                );
-                this.httpClient
-                  .post(
-                    environment.apiUrl + '/api/token/refresh',
-                    body,
-                    refreshOptions
-                  )
-                  .pipe(
-                    catchError((err: any) => {
-                      return of(err);
-                    })
-                  )
-                  .subscribe((response: any) => {
-                    if (response.status == 200) {
-                      const newJwt = response.body.token;
-                      setJwtInSessionStorage(newJwt);
-                      observer.next(true);
-                      observer.complete();
-                      this.authenticatedSource.next(true);
-                    } else {
-                      observer.next(false);
-                      observer.complete();
-                      this.authenticatedSource.next(false);
-                    }
-                  });
-              } else {
-                observer.next(false);
-                observer.complete();
-                this.authenticatedSource.next(false);
-              }
+            }
+            else {
+              this.httpClient
+                .get(
+                  environment.apiUrl + '/api/token/refresh',
+                  refreshOptions
+                )
+                .pipe(
+                  catchError((err: any) => {
+                    return of(err);
+                  })
+                )
+                .subscribe((response: any) => {
+                  if (response.status == 200) {
+                    const newJwt = response.body.token;
+                    setJwtInSessionStorage(newJwt);
+                    observer.next(true);
+                    observer.complete();
+                    this.authenticatedSource.next(true);
+                  } else {
+                    observer.next(false);
+                    observer.complete();
+                    this.authenticatedSource.next(false);
+                  }
+                });
             }
           });
       }
-      else if (refreshToken != null) {
-        const body = new HttpParams().set('refresh_token', refreshToken);
+      else {
         this.httpClient
-          .post(environment.apiUrl + '/api/token/refresh', body, refreshOptions)
+          .get(environment.apiUrl + '/api/token/refresh', refreshOptions)
           .pipe(
             catchError((err: any) => {
               return of(err);
@@ -139,11 +123,6 @@ export class AuthService {
               this.authenticatedSource.next(false);
             }
           });
-      }
-      else {
-        observer.next(false);
-        observer.complete();
-        this.authenticatedSource.next(false);
       }
     });
   }

@@ -4,6 +4,7 @@ import { Observable, BehaviorSubject, of } from 'rxjs';
 import { retry, catchError } from 'rxjs/operators';
 import { Lock } from '../../../types/Lock';
 import { getJwtRequestOptions } from '../auth/jwtHelper';
+import { environment } from 'environment';
 
 interface ResponseWithLocks {
   locks: Lock[];
@@ -13,7 +14,6 @@ interface ResponseWithLocks {
   providedIn: 'root',
 })
 export class CrudService {
-  endpoint = 'http://localhost:8000';
   private lockSource = new BehaviorSubject<Lock[]>([]);
   locks$ = this.lockSource.asObservable();
 
@@ -23,7 +23,10 @@ export class CrudService {
     const options = getJwtRequestOptions();
     if (options != null) {
       this.httpClient
-        .get<ResponseWithLocks>(this.endpoint + '/api/admin/getall', options)
+        .get<ResponseWithLocks>(
+          environment.apiUrl + '/api/admin/getall',
+          options
+        )
         .pipe(
           catchError((err: any) => {
             return of(err);

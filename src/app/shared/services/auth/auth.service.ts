@@ -3,13 +3,13 @@ import { HttpClient, HttpErrorResponse, HttpHandler, HttpHeaders, HttpParams, Ht
 import { BehaviorSubject, Observable, catchError, of, switchMap } from 'rxjs';
 import { setJwtInSessionStorage, getJwtRequestOptions } from './jwtHelper';
 import { getRefreshTokenFromCookie } from './cookieHelper';
+import { environment } from '../../../../../environment';
 
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  endpoint = 'http://localhost:8000/api';
   private authenticatedSource = new BehaviorSubject<boolean>(false);
   authenticated$ = this.authenticatedSource.asObservable();
 
@@ -36,7 +36,7 @@ export class AuthService {
     return new Observable<boolean>((observer) => {
       this.httpClient
         .post(
-          this.endpoint + '/login_check',
+          environment.apiUrl + '/api/login_check',
           { username: username, password: password },
           this.loginOptions
         )
@@ -58,9 +58,17 @@ export class AuthService {
   isLoggedIn(): Observable<boolean> {
     return new Observable<boolean>((observer) => {
       const checkOptions = getJwtRequestOptions();
+      const refreshToken = getRefreshTokenFromCookie();
+      const refreshOptions = {
+        observe: 'response' as const,
+        headers: new HttpHeaders({
+          'Content-Type': 'application/x-www-form-urlencoded',
+        }),
+        withCredentials: true,
+      };
       if (checkOptions != null) {
         this.httpClient
-          .get(this.endpoint + '/jwt_check', checkOptions)
+          .get(environment.apiUrl + '/api/jwt_check', checkOptions)
           .pipe(
             catchError((err: any) => {
               return of(err);
@@ -72,21 +80,17 @@ export class AuthService {
               observer.complete();
               this.authenticatedSource.next(true);
             } else {
-              const refreshToken = getRefreshTokenFromCookie();
-              const refreshOptions = {
-                observe: 'response' as const,
-                headers: new HttpHeaders({
-                  'Content-Type': 'application/x-www-form-urlencoded',
-                }),
-                withCredentials: true,
-              };
               if (refreshToken != null) {
                 const body = new HttpParams().set(
                   'refresh_token',
                   refreshToken
                 );
                 this.httpClient
-                  .post(this.endpoint + '/token/refresh', body, refreshOptions)
+                  .post(
+                    environment.apiUrl + '/api/token/refresh',
+                    body,
+                    refreshOptions
+                  )
                   .pipe(
                     catchError((err: any) => {
                       return of(err);
@@ -112,7 +116,31 @@ export class AuthService {
               }
             }
           });
-      } else {
+      }
+      else if (refreshToken != null) {
+        const body = new HttpParams().set('refresh_token', refreshToken);
+        this.httpClient
+          .post(environment.apiUrl + '/api/token/refresh', body, refreshOptions)
+          .pipe(
+            catchError((err: any) => {
+              return of(err);
+            })
+          )
+          .subscribe((response: any) => {
+            if (response.status == 200) {
+              const newJwt = response.body.token;
+              setJwtInSessionStorage(newJwt);
+              observer.next(true);
+              observer.complete();
+              this.authenticatedSource.next(true);
+            } else {
+              observer.next(false);
+              observer.complete();
+              this.authenticatedSource.next(false);
+            }
+          });
+      }
+      else {
         observer.next(false);
         observer.complete();
         this.authenticatedSource.next(false);

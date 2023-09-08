@@ -2,8 +2,8 @@
   <mat-toolbar color="primary">
     <span>ShareABike</span>
     <div>
-      <a mat-button > Map </a>
-      <a mat-button > Lock list </a>
+      <a mat-button [routerLink]="'/'">Map</a>
+      <a mat-button [routerLink]="'/list'">Lock list</a>
     </div>
     <span class="example-spacer"></span>
     <div *ngIf="isLoggedIn">
@@ -21,6 +21,5 @@
   <app-login></app-login>
 </div>
 <ng-template #elseBlock>
-  <!--<app-list></app-list>-->
-  <app-map></app-map>
+  <router-outlet></router-outlet>
 </ng-template>

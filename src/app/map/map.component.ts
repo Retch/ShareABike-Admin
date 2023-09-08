@@ -1,7 +1,8 @@
 import * as L from 'leaflet';
 import { Component, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Subscription } from 'rxjs';
+import { Subscription, timer, of } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
 import { CrudService } from '../shared/services/crud/crud.service';
 import { lockCoordinatesToLatLngExpression } from '../shared/utils/gpsUtils';
 import { Lock } from '../types/Lock';
@@ -16,9 +17,12 @@ import { timeStampToDateString } from '../shared/utils/timeUtil';
 })
 export class MapComponent implements AfterViewInit {
   private map: L.Map | undefined;
+  private lockMarkerLayer: L.LayerGroup | undefined;
   locks: Lock[] = [];
   private lockSubscription: Subscription | undefined;
+  private timerSubscription: Subscription | undefined;
   private defaultLocation: L.LatLngExpression = [50.985, 11.04];
+  private wasCenterModified = false;
   private markerIconSize: L.PointExpression = [35, 35];
 
   private lockLockedIcon = L.icon({
@@ -72,57 +76,92 @@ export class MapComponent implements AfterViewInit {
     this.lockSubscription = this.crudService.locks$.subscribe(
       (locks: Lock[]) => {
         let mapCenter = this.defaultLocation;
-        for (let lock of locks) {
-          const position: L.LatLngExpression | null =
-            lockCoordinatesToLatLngExpression(lock);
-          if (position != null) {
-            mapCenter = position;
-            let icon = this.lockLockedIcon;
-            const isAlerted = lock.lastEvent != null;
-            switch (lock.isLocked) {
-              case true:
-                icon = isAlerted ? this.lockAlertLockedIcon : this.lockLockedIcon;
-                break;
-              case false:
-                icon = isAlerted ? this.lockAlertOpenIcon : this.lockOpenIcon;
-                break;
-              default:
-                icon = this.lockQuestionIcon;
-            }
-            const marker = L.marker(position, {
-              icon: icon,
-            }).addTo(this.map!);
-            marker.bindPopup(
-              '<b>Lock ' +
-                lock.id +
-                ' (' +
-                lock.lockTypeDescription +
-                ')' +
-                '</b><br />ID: ' +
-                lock.deviceId +
-                '<br />QR Code: ' +
-                lock.qrCodeContent +
-                '<br />Battery: ' +
-                lock.batteryPercentage +
-                ' %' +
-                '<br />Cellular Signal Quality: ' +
-                lock.cellularSignalQualityPercentage +
-                ' %<br />Last Contact: ' +
-                timeStampToDateString(lock.lastContactUtcTimestamp ?? 0) +
-                '<br />Last Position: ' +
-                timeStampToDateString(lock.lastPositionTimeUtcTimestamp ?? 0) +
-                '<br />Satellites: ' +
-                lock.satellites +
-                '<br />GPS signal: ' +
-                (lock.noGps ? "no" : "yes") + '<br />' +
-                (lock.lastEvent != null ? 'Last event: ' + lock.lastEvent + ' (' + timeStampToDateString(lock.lastEventUtcTimestamp!) + ')' : '')
-            );
-          }
+        this.lockMarkerLayer?.clearLayers();
+        if (this.map != null) {
+          this.setMapMarkers(locks);
         }
-        this.map!.setView(mapCenter, 13);
+        if (!this.wasCenterModified) {
+          this.setMapCenter(mapCenter);
+        }
       }
     );
     this.crudService.fetchAllLocks();
+    this.timerSubscription = timer(0, 10000)
+      .pipe(
+        switchMap(() => {
+          this.crudService.fetchAllLocks();
+          return of();
+        })
+      )
+      .subscribe();
+  }
+
+  setMapCenter(center: L.LatLngExpression) {
+    this.map?.setView(center, 13);
+    this.wasCenterModified = true;
+  }
+
+  setMapMarkers(locks: Lock[]) {
+    if (this.lockMarkerLayer == null) {
+      this.lockMarkerLayer = L.layerGroup().addTo(this.map!);
+    }
+    else {
+      this.lockMarkerLayer.clearLayers();
+      for (let lock of locks) {
+        const position: L.LatLngExpression | null = lockCoordinatesToLatLngExpression(lock);
+            if (position != null) {
+              let icon = this.lockLockedIcon;
+              const isAlerted = lock.lastEvent != null;
+              switch (lock.isLocked) {
+                case true:
+                  icon = isAlerted
+                    ? this.lockAlertLockedIcon
+                    : this.lockLockedIcon;
+                  break;
+                case false:
+                  icon = isAlerted ? this.lockAlertOpenIcon : this.lockOpenIcon;
+                  break;
+                default:
+                  icon = this.lockQuestionIcon;
+              }
+              const marker = L.marker(position, {
+                icon: icon,
+              }).addTo(this.lockMarkerLayer!);
+              marker.bindPopup(
+                '<b>Lock ' +
+                  lock.id +
+                  ' (' +
+                  lock.lockTypeDescription +
+                  ')' +
+                  '</b><br />ID: ' +
+                  lock.deviceId +
+                  '<br />QR Code: ' +
+                  lock.qrCodeContent +
+                  '<br />Battery: ' +
+                  lock.batteryPercentage +
+                  ' %' +
+                  '<br />Cellular Signal Quality: ' +
+                  lock.cellularSignalQualityPercentage +
+                  ' %<br />Last Contact: ' +
+                  timeStampToDateString(lock.lastContactUtcTimestamp ?? 0) +
+                  '<br />Last Position: ' +
+                  timeStampToDateString(lock.lastPositionTimeUtcTimestamp ?? 0) +
+                  '<br />Satellites: ' +
+                  lock.satellites +
+                  '<br />GPS signal: ' +
+                  (lock.noGps ? 'no' : 'yes') +
+                  '<br />' +
+                  (lock.lastEvent != null
+                    ? 'Last event: ' +
+                      lock.lastEvent +
+                      ' (' +
+                      timeStampToDateString(lock.lastEventUtcTimestamp!) +
+                      ')'
+                    : '')
+              );
+            }
+          }
+        }
   }
 
   ngAfterViewInit(): void {
@@ -131,5 +170,6 @@ export class MapComponent implements AfterViewInit {
 
   ngOnDestroy() {
     this.lockSubscription!.unsubscribe();
+    this.timerSubscription!.unsubscribe();
   }
 }

@@ -1,0 +1,8 @@
+<h1 mat-dialog-title>Unlock lock?</h1>
+<div mat-dialog-content class="dialog-content">
+  <p>Do you want to unlock the lock with device identifier {{data.deviceId}}?</p>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">Cancel</button>
+  <button mat-button (click)="onUnlockClick(data.id)" cdkFocusInitial>Unlock</button>
+</div>

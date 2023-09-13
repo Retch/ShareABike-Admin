@@ -1,15 +1,11 @@
-import { Component, EventEmitter, Output, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
-import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatCardModule } from '@angular/material/card';
-import { FormControl, FormGroup } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
-import { Observable } from 'rxjs';
 import { CrudService } from '../shared/services/crud/crud.service';
 import { AuthService } from '../shared/services/auth/auth.service';
 import { Subscription } from 'rxjs';
@@ -21,8 +17,6 @@ import { Subscription } from 'rxjs';
   imports: [
     CommonModule,
     HttpClientModule,
-    MatSlideToggleModule,
-    MatFormFieldModule,
     MatIconModule,
     MatInputModule,
     MatButtonModule,

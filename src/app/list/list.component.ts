@@ -1,16 +1,18 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {animate, state, style, transition, trigger} from '@angular/animations';
+import { animate, state, style, transition, trigger } from '@angular/animations';
 import { MatIconModule } from '@angular/material/icon';
 import { OnInit } from '@angular/core';
-import { MatTable, MatTableModule } from '@angular/material/table';
+import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
 import { CrudService } from '../shared/services/crud/crud.service';
-import { Subscription } from 'rxjs';
+import { Subscription, Subject } from 'rxjs';
 import { Lock } from '../types/Lock';
-import { MatListModule } from '@angular/material/list';
 import { timeStampToDateString } from '../shared/utils/timeUtil';
-
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { UnlockDialogComponent } from './unlock-dialog/unlock-dialog.component';
+import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarModule, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
+import { SnackBarContent } from '../types/SnackBarContent';
 
 @Component({
   selector: 'app-list',
@@ -19,8 +21,10 @@ import { timeStampToDateString } from '../shared/utils/timeUtil';
     CommonModule,
     MatButtonModule,
     MatTableModule,
-    MatListModule,
     MatIconModule,
+    MatDialogModule,
+    MatButtonModule,
+    MatSnackBarModule,
   ],
   animations: [
     trigger('detailExpand', [
@@ -36,13 +40,29 @@ import { timeStampToDateString } from '../shared/utils/timeUtil';
   styleUrls: ['./list.component.css'],
 })
 export class ListComponent implements OnInit {
+  columnsToDisplay = [
+    'id',
+    'deviceId',
+    'isLocked',
+    'battery',
+    'cellular',
+    'lastContact',
+    'gps',
+  ];
   locks: Lock[] = [];
   private lockSubscription: Subscription | undefined;
-  columnsToDisplay = ['id', 'deviceId', 'isLocked', 'battery', 'cellular', 'lastContact', 'gps'];
   columnsToDisplayWithExpand = [...this.columnsToDisplay, 'expand'];
   expandedElement: Lock | undefined;
+  snackBarHorizontalPosition: MatSnackBarHorizontalPosition = 'end';
+  snackBarVerticalPosition: MatSnackBarVerticalPosition = 'bottom';
+  snackBarDuration = 4000;
+  snackBarSubject = new Subject<SnackBarContent>();
 
-  constructor(public crudService: CrudService) {}
+  constructor(
+    public crudService: CrudService,
+    public dialog: MatDialog,
+    private _snackBar: MatSnackBar
+  ) {}
 
   addData() {}
 
@@ -52,14 +72,38 @@ export class ListComponent implements OnInit {
     return timeStampToDateString(timeStamp);
   }
 
+  openDialog(id: string, deviceId: string): void {
+    const dialogRef = this.dialog.open(UnlockDialogComponent, {
+      data: {
+        id: id,
+        deviceId: deviceId,
+        snackBarSubject: this.snackBarSubject,
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {});
+  }
+
+  openSnackBar(content: string, dismiss: string) {
+    this._snackBar.open(content, dismiss, {
+      horizontalPosition: this.snackBarHorizontalPosition,
+      verticalPosition: this.snackBarVerticalPosition,
+      duration: this.snackBarDuration,
+    });
+  }
+
   ngOnInit() {
     this.lockSubscription = this.crudService.locks$.subscribe((locks: any) => {
       this.locks = locks;
     });
     this.crudService.fetchAllLocks();
+    this.snackBarSubject.subscribe((data) => {
+      this.openSnackBar(data.message, data.dismiss);
+    });
   }
 
   ngOnDestroy() {
     this.lockSubscription!.unsubscribe();
+    this.snackBarSubject.unsubscribe();
   }
 }

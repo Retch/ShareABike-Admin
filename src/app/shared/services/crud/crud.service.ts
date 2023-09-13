@@ -37,4 +37,29 @@ export class CrudService {
         });
     }
   }
+
+  unlockLock(id: string): Observable<boolean> {
+    const options = getJwtRequestOptions();
+    return new Observable<boolean>((observer) => {
+      if (options != null) {
+        this.httpClient
+          .get(environment.apiUrl + '/api/admin/requestunlock/' + id, options)
+          .pipe(
+            catchError((err: any) => {
+              observer.next(false);
+              observer.complete();
+              return of(err);
+            })
+          )
+          .subscribe((response: any) => {
+            observer.next(true);
+            observer.complete();
+          });
+      }
+      else {
+        observer.next(false);
+        observer.complete();
+      }
+    });
+  }
 }

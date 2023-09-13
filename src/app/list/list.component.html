@@ -16,8 +16,10 @@
     <th mat-header-cell *matHeaderCellDef>Locked?</th>
     <td mat-cell *matCellDef="let element">
       <div *ngIf="element.isLocked != null; else elseBlock">
-        <mat-icon *ngIf="element.isLocked">done</mat-icon>
-      <mat-icon *ngIf="!element.isLocked">close</mat-icon>
+        <mat-icon>{{element.isLocked ? 'done' : 'close'}}</mat-icon>
+        <button disabled="{{element.isLocked ? false : true}}" (click)="element.isLocked ? openDialog(element.id, element.deviceId) : null; $event.stopPropagation()" mat-icon-button>
+          <mat-icon>key-outline</mat-icon>
+        </button>
       </div>
       <ng-template #elseBlock>
         <div>No data</div>

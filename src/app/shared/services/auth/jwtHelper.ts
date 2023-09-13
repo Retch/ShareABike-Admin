@@ -1,5 +1,5 @@
-import { HttpHeaders } from '@angular/common/http';
-import { Buffer } from 'buffer/';
+import {HttpHeaders} from '@angular/common/http';
+import {Buffer} from 'buffer/';
 
 const getJwtFromSessionStorage = (): string | null => {
     return sessionStorage.getItem('jwt');
@@ -25,12 +25,11 @@ const getJwtRequestOptions = (): { headers: HttpHeaders } | null => {
         if (isJwtExpired(jwt)) {
             return null;
         }
-        const checkOptions = {
-            headers: new HttpHeaders({
+      return {
+          headers: new HttpHeaders({
             Authorization: 'Bearer ' + jwt,
-            }),
+          }),
         };
-        return checkOptions;
     }
     return null;
 }

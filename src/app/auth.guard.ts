@@ -1,7 +1,6 @@
 import {
   ActivatedRouteSnapshot,
   CanActivateFn,
-  Router,
   RouterStateSnapshot,
 } from '@angular/router';
 import { AuthService } from './shared/services/auth/auth.service';

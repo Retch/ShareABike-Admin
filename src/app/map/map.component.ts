@@ -18,7 +18,6 @@ import { timeStampToDateString } from '../shared/utils/timeUtil';
 export class MapComponent implements AfterViewInit {
   private map: L.Map | undefined;
   private lockMarkerLayer: L.LayerGroup | undefined;
-  locks: Lock[] = [];
   private lockSubscription: Subscription | undefined;
   private timerSubscription: Subscription | undefined;
   private defaultLocation: L.LatLngExpression = [50.985, 11.04];

@@ -10,6 +10,7 @@ import { Subscription, Subject } from 'rxjs';
 import { Lock } from '../types/Lock';
 import { timeStampToDateString } from '../shared/utils/timeUtil';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { UnlockDialogComponent } from './unlock-dialog/unlock-dialog.component';
 import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarModule, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
 import { SnackBarContent } from '../types/SnackBarContent';
@@ -25,6 +26,7 @@ import { SnackBarContent } from '../types/SnackBarContent';
     MatDialogModule,
     MatButtonModule,
     MatSnackBarModule,
+    MatTooltipModule,
   ],
   animations: [
     trigger('detailExpand', [
@@ -57,6 +59,7 @@ export class ListComponent implements OnInit {
   snackBarVerticalPosition: MatSnackBarVerticalPosition = 'bottom';
   snackBarDuration = 4000;
   snackBarSubject = new Subject<SnackBarContent>();
+  tooltipDelayShow = 500;
 
   constructor(
     public crudService: CrudService,

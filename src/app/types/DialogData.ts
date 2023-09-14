@@ -2,7 +2,7 @@ import { SnackBarContent } from "./SnackBarContent";
 import { Subject } from "rxjs";
 
 export interface DialogData {
-  id: string;
+  id: number;
   deviceId: string;
   snackBarSubject: Subject<SnackBarContent>;
 }

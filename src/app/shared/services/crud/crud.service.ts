@@ -38,7 +38,7 @@ export class CrudService {
     }
   }
 
-  unlockLock(id: string): Observable<boolean> {
+  unlockLock(id: number): Observable<boolean> {
     const options = getJwtRequestOptions();
     return new Observable<boolean>((observer) => {
       if (options != null) {
@@ -62,4 +62,76 @@ export class CrudService {
       }
     });
   }
+
+  requestPositionForLock(id: number): Observable<boolean> {
+    const options = getJwtRequestOptions();
+    return new Observable<boolean>((observer) => {
+      if (options != null) {
+        this.httpClient
+          .get(environment.apiUrl + '/api/admin/requestposition/' + id, options)
+          .pipe(
+            catchError((err: any) => {
+              observer.next(false);
+              observer.complete();
+              return of(err);
+            })
+          )
+          .subscribe((response: any) => {
+            observer.next(true);
+            observer.complete();
+          });
+      } else {
+        observer.next(false);
+        observer.complete();
+      }
+    });
+  }
+
+    requestInfoForLock(id: number): Observable<boolean> {
+        const options = getJwtRequestOptions();
+        return new Observable<boolean>((observer) => {
+            if (options != null) {
+                this.httpClient
+                    .get(environment.apiUrl + '/api/admin/requestinfo/' + id, options)
+                    .pipe(
+                        catchError((err: any) => {
+                            observer.next(false);
+                            observer.complete();
+                            return of(err);
+                        })
+                    )
+                    .subscribe((response: any) => {
+                        observer.next(true);
+                        observer.complete();
+                    });
+            } else {
+                observer.next(false);
+                observer.complete();
+            }
+        });
+    }
+
+    requestRingForLock(id: number): Observable<boolean> {
+        const options = getJwtRequestOptions();
+        return new Observable<boolean>((observer) => {
+            if (options != null) {
+                this.httpClient
+                    .get(environment.apiUrl + '/api/admin/requestring/' + id, options)
+                    .pipe(
+                        catchError((err: any) => {
+                            observer.next(false);
+                            observer.complete();
+                            return of(err);
+                        })
+                    )
+                    .subscribe((response: any) => {
+                        observer.next(true);
+                        observer.complete();
+                    });
+            } else {
+                observer.next(false);
+                observer.complete();
+            }
+        });
+    }
 }

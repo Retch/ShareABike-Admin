@@ -6,7 +6,7 @@ import { OnInit } from '@angular/core';
 import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
 import { CrudService } from '../shared/services/crud/crud.service';
-import { Subscription, Subject } from 'rxjs';
+import {Subscription, Subject, timer, of} from 'rxjs';
 import { Lock } from '../types/Lock';
 import { timeStampToDateString } from '../shared/utils/timeUtil';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
@@ -14,6 +14,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { UnlockDialogComponent } from './unlock-dialog/unlock-dialog.component';
 import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarModule, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
 import { SnackBarContent } from '../types/SnackBarContent';
+import {switchMap} from "rxjs/operators";
 
 @Component({
   selector: 'app-list',
@@ -53,6 +54,7 @@ export class ListComponent implements OnInit {
   ];
   locks: Lock[] = [];
   private lockSubscription: Subscription | undefined;
+  private timerSubscription: Subscription | undefined;
   columnsToDisplayWithExpand = [...this.columnsToDisplay, 'expand'];
   expandedElement: Lock | undefined;
   snackBarHorizontalPosition: MatSnackBarHorizontalPosition = 'end';
@@ -83,9 +85,56 @@ export class ListComponent implements OnInit {
         snackBarSubject: this.snackBarSubject,
       },
     });
-
     dialogRef.afterClosed().subscribe((result) => {});
   }
+
+  requestLocationForLock(id: number) {
+    this.crudService.requestPositionForLock(id).subscribe((response: boolean) => {
+      if (response) {
+        this.snackBarSubject.next({
+          message: 'Command successfully sent',
+          dismiss: 'Dismiss',
+        });
+      } else {
+        this.snackBarSubject.next({
+          message: 'Error sending command to lock',
+          dismiss: 'Dismiss',
+        });
+      }
+    });
+  }
+
+    requestInfoForLock(id: number) {
+        this.crudService.requestInfoForLock(id).subscribe((response: boolean) => {
+            if (response) {
+                this.snackBarSubject.next({
+                    message: 'Command successfully sent',
+                    dismiss: 'Dismiss',
+                });
+            } else {
+                this.snackBarSubject.next({
+                    message: 'Error sending command to lock',
+                    dismiss: 'Dismiss',
+                });
+            }
+        });
+    }
+
+    requestRingForLock(id: number) {
+        this.crudService.requestRingForLock(id).subscribe((response: boolean) => {
+            if (response) {
+                this.snackBarSubject.next({
+                    message: 'Command successfully sent',
+                    dismiss: 'Dismiss',
+                });
+            } else {
+                this.snackBarSubject.next({
+                    message: 'Error sending command to lock',
+                    dismiss: 'Dismiss',
+                });
+            }
+        });
+    }
 
   openSnackBar(content: string, dismiss: string) {
     this._snackBar.open(content, dismiss, {
@@ -100,6 +149,14 @@ export class ListComponent implements OnInit {
       this.locks = locks;
     });
     this.crudService.fetchAllLocks();
+    this.timerSubscription = timer(0, 10000)
+      .pipe(
+        switchMap(() => {
+          this.crudService.fetchAllLocks();
+          return of();
+        })
+      )
+      .subscribe();
     this.snackBarSubject.subscribe((data) => {
       this.openSnackBar(data.message, data.dismiss);
     });

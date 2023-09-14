@@ -27,7 +27,7 @@ export class UnlockDialogComponent {
     this.dialogRef.close();
   }
 
-  onUnlockClick(id: string): void {
+  onUnlockClick(id: number): void {
     this.crudService.unlockLock(id).subscribe((response: boolean) => {
       if (response) {
         this.data.snackBarSubject.next({

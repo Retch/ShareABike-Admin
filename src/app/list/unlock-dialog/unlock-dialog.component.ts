@@ -7,7 +7,7 @@ import {
   MatDialogModule,
 } from '@angular/material/dialog';
 import { CrudService } from 'src/app/shared/services/crud/crud.service';
-import { DialogData } from 'src/app/types/DialogData';
+import { DialogDataLockUnlock } from 'src/app/types/DialogDataLockUnlock';
 
 @Component({
   selector: 'app-unlock-dialog',
@@ -20,7 +20,7 @@ export class UnlockDialogComponent {
   constructor(
     public dialogRef: MatDialogRef<UnlockDialogComponent>,
     public crudService: CrudService,
-    @Inject(MAT_DIALOG_DATA) public data: DialogData
+    @Inject(MAT_DIALOG_DATA) public data: DialogDataLockUnlock
   ) {}
 
   onNoClick(): void {

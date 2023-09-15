@@ -4,12 +4,12 @@
 
   <ng-container matColumnDef="id">
     <th mat-header-cell *matHeaderCellDef>Lock id</th>
-    <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+    <td mat-cell *matCellDef="let element">{{element.id}}</td>
   </ng-container>
 
   <ng-container matColumnDef="deviceId">
     <th matTooltip="In most cases this should be the IMEI of the device" [matTooltipShowDelay]="tooltipDelayShow*2" mat-header-cell *matHeaderCellDef>Device id</th>
-    <td mat-cell *matCellDef="let element"> {{element.deviceId}} </td>
+    <td mat-cell *matCellDef="let element">{{element.deviceId}}</td>
   </ng-container>
 
   <ng-container matColumnDef="isLocked">
@@ -17,7 +17,7 @@
     <td mat-cell *matCellDef="let element">
       <div *ngIf="element['isLocked'] != null; else elseBlock">
         <mat-icon>{{element.isLocked ? 'done' : 'close'}}</mat-icon>
-        <button matTooltip="Request unlock" [matTooltipShowDelay]="tooltipDelayShow" disabled="{{!element.isLocked}}" (click)="element.isLocked ? openDialog(element.id, element.deviceId) : null; $event.stopPropagation()" mat-icon-button>
+        <button matTooltip="Request unlock" [matTooltipShowDelay]="tooltipDelayShow" disabled="{{!element.isLocked}}" (click)="element.isLocked ? openUnlockDialog(element.id, element.deviceId) : null; $event.stopPropagation()" mat-icon-button>
           <mat-icon>key-outline</mat-icon>
         </button>
       </div>
@@ -60,15 +60,24 @@
   <ng-container matColumnDef="expand">
     <th mat-header-cell *matHeaderCellDef aria-label="row actions">&nbsp;</th>
     <td mat-cell *matCellDef="let element">
-      <button matTooltip="Request general information" [matTooltipShowDelay]="tooltipDelayShow" mat-icon-button (click)="requestInfoForLock(element.id); $event.stopPropagation()">
+      <button disabled="{{element.lastContactUtcTimestamp == null}}" matTooltip="Request general information" [matTooltipShowDelay]="tooltipDelayShow" mat-icon-button (click)="requestInfoForLock(element.id); $event.stopPropagation()">
         <mat-icon>refresh</mat-icon>
       </button>
-      <button matTooltip="Request lock ring alarm" [matTooltipShowDelay]="tooltipDelayShow" mat-icon-button (click)="requestRingForLock(element.id); $event.stopPropagation()">
+      <button disabled="{{element.lastContactUtcTimestamp == null}}" matTooltip="Request lock ring alarm" [matTooltipShowDelay]="tooltipDelayShow" mat-icon-button (click)="requestRingForLock(element.id); $event.stopPropagation()">
         <mat-icon>notifications_active-outline</mat-icon>
       </button>
       <button mat-icon-button aria-label="expand row" (click)="(expandedElement = expandedElement === element ? null : element); $event.stopPropagation()">
         <mat-icon *ngIf="expandedElement !== element">keyboard_arrow_down</mat-icon>
         <mat-icon *ngIf="expandedElement === element">keyboard_arrow_up</mat-icon>
+      </button>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="delete">
+    <th mat-header-cell *matHeaderCellDef aria-label="row actions">&nbsp;</th>
+    <td mat-cell *matCellDef="let element">
+      <button matTooltip="Delete lock" [matTooltipShowDelay]="tooltipDelayShow" mat-icon-button (click)="openDeleteDialog(element.id, element.deviceId); $event.stopPropagation()">
+        <mat-icon>delete-outline</mat-icon>
       </button>
     </td>
   </ng-container>
@@ -98,3 +107,9 @@
   </tr>
   <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
 </table>
+
+<div class="add-button-container">
+  <button matTooltip="Register Lock" [matTooltipShowDelay]="tooltipDelayShow" (click)="openAddDialog()" mat-fab color="primary" aria-label="Example icon button with a home icon">
+    <mat-icon>add</mat-icon>
+  </button>
+</div>

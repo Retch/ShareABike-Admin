@@ -19,16 +19,17 @@ const isJwtExpired = (jwt: string): boolean => {
     return exp <= now;
 }
 
-const getJwtRequestOptions = (): { headers: HttpHeaders } | null => {
+const getJwtRequestOptions = (responseType = "json"): { headers: HttpHeaders, responseType: "json" | undefined } | null => {
     const jwt = getJwtFromSessionStorage();
     if (jwt != null) {
         if (isJwtExpired(jwt)) {
             return null;
         }
-      return {
+        return {
           headers: new HttpHeaders({
             Authorization: 'Bearer ' + jwt,
           }),
+          responseType: responseType as "json"
         };
     }
     return null;

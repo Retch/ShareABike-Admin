@@ -11,6 +11,6 @@ export const routes: Routes = [
   {
     path: 'list',
     component: ListComponent,
-    title: 'List Page',
+    title: 'Lock List',
   },
 ];

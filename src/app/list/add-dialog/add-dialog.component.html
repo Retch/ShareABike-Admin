@@ -1,0 +1,37 @@
+<h1 mat-dialog-title>Register Lock</h1>
+<div mat-dialog-content class="dialog-content">
+  <p>Fill in the lock details to register it in the backend to gather information through lock adapter and control it.</p>
+  <form class="example-form">
+
+
+    <div><mat-form-field class="input-select-item">
+        <mat-label>Device identifier</mat-label>
+        <input [(ngModel)]="deviceId" [ngModelOptions]="{standalone: true}" matInput placeholder="In most cases the IMEI">
+      </mat-form-field>
+    </div>
+
+    <div>
+      <mat-form-field class="input-select-item">
+        <mat-label>QR code content</mat-label>
+        <input [(ngModel)]="qrCodeContent" [ngModelOptions]="{standalone: true}" matInput placeholder="noted below the QR or read with scanner">
+      </mat-form-field>
+    </div>
+
+    <div>
+      <mat-form-field class="input-select-item">
+        <mat-label>Lock type</mat-label>
+        <mat-select [(value)]="lockTypeId">
+          <mat-option *ngFor="let lockType of lockTypes" [value]="lockType.id">
+            {{lockType.description}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+  </form>
+
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()" >Cancel</button>
+  <button mat-button disabled="{{deviceId == '' || qrCodeContent == '' || lockTypeId == 0}}" (click)="onSubmitClick()">Submit</button>
+</div>

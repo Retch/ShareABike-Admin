@@ -79,12 +79,6 @@ export class ListComponent implements OnInit {
     ) {
     }
 
-    addData() {
-    }
-
-    removeData() {
-    }
-
     makeReadableTime(timeStamp: number): string {
         return timeStampToDateString(timeStamp);
     }

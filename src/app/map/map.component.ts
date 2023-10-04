@@ -63,9 +63,9 @@ export class MapComponent implements AfterViewInit {
         maxZoom: 18,
         minZoom: 3,
         attribution:
-          '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+          '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
       }
-    ); //https://{s}.tile-cyclosm.openstreetmap.fr/cyclosm/{z}/{x}/{y}.png
+    );
     tiles.addTo(this.map);
   }
 

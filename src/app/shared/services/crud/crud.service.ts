@@ -60,7 +60,7 @@ export class CrudService {
               return of(err);
             })
           )
-          .subscribe((response: any) => {
+          .subscribe(() => {
             this.fetchAllLocks();
             observer.next(true);
             observer.complete();
@@ -85,7 +85,7 @@ export class CrudService {
               return of(err);
             })
           )
-          .subscribe((response: any) => {
+          .subscribe(() => {
             this.fetchAllLocks();
             observer.next(true);
             observer.complete();
@@ -129,7 +129,7 @@ export class CrudService {
               return of(err);
             })
           )
-          .subscribe((response: any) => {
+          .subscribe(() => {
             observer.next(true);
             observer.complete();
           });
@@ -153,7 +153,7 @@ export class CrudService {
               return of(err);
             })
           )
-          .subscribe((response: any) => {
+          .subscribe(() => {
             observer.next(true);
             observer.complete();
           });
@@ -177,7 +177,7 @@ export class CrudService {
               return of(err);
             })
           )
-          .subscribe((response: any) => {
+          .subscribe(() => {
             observer.next(true);
             observer.complete();
           });
@@ -201,7 +201,7 @@ export class CrudService {
               return of(err);
             })
           )
-          .subscribe((response: any) => {
+          .subscribe(() => {
             observer.next(true);
             observer.complete();
           });

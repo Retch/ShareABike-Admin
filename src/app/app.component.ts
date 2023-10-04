@@ -59,8 +59,7 @@ export class AppComponent implements OnInit {
         this.isLoggedIn = auth;
       }
     );
-    this.authService.isLoggedIn().subscribe((isValid) => {
-    });
+    this.authService.isLoggedIn().subscribe(() => {});
     this.snackBarSubject.subscribe((data) => {
       this.openSnackBar(data.message, data.dismiss);
     });

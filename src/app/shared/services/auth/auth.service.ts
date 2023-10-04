@@ -15,12 +15,6 @@ export class AuthService {
   constructor(private httpClient: HttpClient) {
   }
 
-  httpHeader = {
-    headers: new HttpHeaders({
-      'Content-Type': 'application/json',
-    }),
-  };
-
   loginOptions = {
     observe: 'response' as const,
     headers: new HttpHeaders({

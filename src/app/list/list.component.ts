@@ -92,7 +92,7 @@ export class ListComponent implements OnInit {
         snackBarSubject: this.snackBarSubject,
       },
     });
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().subscribe(() => {
     });
   }
 
@@ -104,7 +104,7 @@ export class ListComponent implements OnInit {
         snackBarSubject: this.snackBarSubject,
       },
     });
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().subscribe(() => {
     });
   }
 
@@ -115,7 +115,7 @@ export class ListComponent implements OnInit {
         snackBarSubject: this.snackBarSubject,
       },
     });
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().subscribe(() => {
     });
   }
 

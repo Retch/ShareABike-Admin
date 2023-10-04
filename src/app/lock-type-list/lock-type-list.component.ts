@@ -39,7 +39,7 @@ export class LockTypeListComponent implements OnInit {
         lockTypeElement: lockTypeElement,
       },
     });
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().subscribe(() => {
     });
   }
 

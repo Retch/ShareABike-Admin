@@ -59,7 +59,7 @@ export class LoginComponent implements OnInit {
   login() {
     this.authService
       .loginWithCredentials(this.username, this.password)
-      .subscribe((res) => {
+      .subscribe(() => {
       });
   }
 }

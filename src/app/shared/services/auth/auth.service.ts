@@ -54,6 +54,38 @@ export class AuthService {
     });
   }
 
+  logout(): Observable<boolean> {
+    return new Observable<boolean>((observer) => {
+      const logoutOptions = {
+        observe: 'response' as const,
+        withCredentials: true,
+      };
+
+      sessionStorage.removeItem('jwt');
+
+      this.httpClient
+        .get(
+          environment.apiUrl + '/api/token/invalidate',
+          logoutOptions
+        )
+        .pipe(
+          catchError((err: any) => {
+            return of(err);
+          })
+        )
+        .subscribe((response: any) => {
+          if (response.status == 200) {
+            observer.next(true);
+            observer.complete();
+          }
+          else {
+            observer.next(false);
+            observer.complete();
+          }
+        });
+    });
+  }
+
   isLoggedIn(): Observable<boolean> {
     return new Observable<boolean>((observer) => {
       const checkOptions = getJwtRequestOptions();

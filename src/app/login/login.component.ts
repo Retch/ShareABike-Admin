@@ -53,22 +53,9 @@ export class LoginComponent implements OnInit {
 
   fetchData() {
     console.log(this.username, this.password);
-    //this.result$ = this.http.get('http://localhost:8000/api/login_check');
-    //let res = this.http.get('https://enpwbd5az2w17.x.pipedream.net/');
   }
 
   login() {
-    //this.fetchData();
-    /*return this.crudService.getAllLocks().subscribe((res: {}) => {
-      this.Locks = res;
-      console.log(this.Locks);
-    });*/
-    //sessionStorage.setItem('jwt', 'test');
-    //console.log(sessionStorage.getItem('jwt'));
-    //const res = this.authService.isLoggedIn();
-    //res.subscribe((res: any) => {
-    //  console.log(res);
-    //});
     this.authService
       .loginWithCredentials(this.username, this.password)
       .subscribe((res) => {});

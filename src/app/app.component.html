@@ -1,5 +1,5 @@
 <div>
-  <mat-toolbar color="primary">
+  <mat-toolbar color="primary" class="toolbar">
     <span>ShareABike</span>
     <div>
       <a mat-button [routerLink]="'/'">Map</a>
@@ -8,13 +8,10 @@
     </div>
     <span class="example-spacer"></span>
     <div *ngIf="isLoggedIn">
-      <button mat-icon-button class="example-icon favorite-icon" aria-label="Example icon-button with heart icon">
+      <button (click)="logout()" mat-icon-button class="example-icon favorite-icon" aria-label="Example icon-button with heart icon">
         <mat-icon>logout</mat-icon>
       </button>
     </div>
-    <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon">
-      <mat-icon>share</mat-icon>
-    </button>
   </mat-toolbar>
 </div>
 

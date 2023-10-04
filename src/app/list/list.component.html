@@ -86,15 +86,17 @@
     <td mat-cell *matCellDef="let element" [attr.colspan]="columnsToDisplayWithExpand.length">
       <div class="example-element-detail"
            [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
-        <div class="example-element-diagram">
-          <div>{{"QR Code: " + element.qrCodeContent}}</div>
-        </div>
-        <div *ngIf="element.noGps == false && element.lastPositionTimeUtcTimestamp != null" class="example-element-diagram">
-          <div> Coordinates </div>
-          <div>{{element.latitudeHemisphere + " " + element.latitudeDegrees}}</div>
-          <div>{{element.longitudeHemisphere + " " + element.longitudeDegrees}}</div>
-          <div>{{"Last update: " + makeReadableTime(element.lastPositionTimeUtcTimestamp)}} </div>
-        </div>
+        <mat-card class="more-card">
+          <mat-card-header>QR Code content</mat-card-header>
+          <mat-card-content>{{element.qrCodeContent}}</mat-card-content>
+        </mat-card>
+
+        <mat-card *ngIf="element.noGps == false && element.lastPositionTimeUtcTimestamp != null" class="more-card">
+          <mat-card-header>Coordinates</mat-card-header>
+          <mat-card-content>{{element.latitudeHemisphere + " " + element.latitudeDegrees}}</mat-card-content>
+          <mat-card-content>{{element.longitudeHemisphere + " " + element.longitudeDegrees}}</mat-card-content>
+          <mat-card-content>{{"Last update: " + makeReadableTime(element.lastPositionTimeUtcTimestamp)}}</mat-card-content>
+        </mat-card>
       </div>
     </td>
   </ng-container>

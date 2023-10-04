@@ -23,6 +23,7 @@ import {
 import {SnackBarContent} from '../types/SnackBarContent';
 import {switchMap} from "rxjs/operators";
 import {MatSortModule} from "@angular/material/sort";
+import { MatCardModule } from '@angular/material/card';
 
 @Component({
     selector: 'app-list',
@@ -37,6 +38,7 @@ import {MatSortModule} from "@angular/material/sort";
         MatSnackBarModule,
         MatTooltipModule,
         MatSortModule,
+        MatCardModule
     ],
     animations: [
         trigger('detailExpand', [

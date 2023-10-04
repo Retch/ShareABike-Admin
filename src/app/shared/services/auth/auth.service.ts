@@ -1,8 +1,8 @@
-import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { BehaviorSubject, Observable, catchError, of } from 'rxjs';
-import { setJwtInSessionStorage, getJwtRequestOptions } from './jwtHelper';
-import { environment } from '../../../../../environment';
+import {Injectable} from '@angular/core';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {BehaviorSubject, catchError, Observable, of} from 'rxjs';
+import {getJwtRequestOptions, setJwtInSessionStorage} from './jwtHelper';
+import {environment} from '../../../../../environment';
 
 
 @Injectable({
@@ -12,7 +12,8 @@ export class AuthService {
   private authenticatedSource = new BehaviorSubject<boolean>(false);
   authenticated$ = this.authenticatedSource.asObservable();
 
-  constructor(private httpClient: HttpClient) {}
+  constructor(private httpClient: HttpClient) {
+  }
 
   httpHeader = {
     headers: new HttpHeaders({
@@ -36,7 +37,7 @@ export class AuthService {
       this.httpClient
         .post(
           environment.apiUrl + '/api/login_check',
-          { username: username, password: password },
+          {username: username, password: password},
           this.loginOptions
         )
         .subscribe((response: any) => {
@@ -77,8 +78,7 @@ export class AuthService {
           if (response.status == 200) {
             observer.next(true);
             observer.complete();
-          }
-          else {
+          } else {
             observer.next(false);
             observer.complete();
           }
@@ -106,8 +106,7 @@ export class AuthService {
               observer.next(true);
               observer.complete();
               this.authenticatedSource.next(true);
-            }
-            else {
+            } else {
               this.httpClient
                 .get(
                   environment.apiUrl + '/api/token/refresh',
@@ -133,8 +132,7 @@ export class AuthService {
                 });
             }
           });
-      }
-      else {
+      } else {
         this.httpClient
           .get(environment.apiUrl + '/api/token/refresh', refreshOptions)
           .pipe(

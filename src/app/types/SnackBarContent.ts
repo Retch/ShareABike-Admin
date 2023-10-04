@@ -1,4 +1,4 @@
 export interface SnackBarContent {
-    message: string;
-    dismiss: string;
+  message: string;
+  dismiss: string;
 }

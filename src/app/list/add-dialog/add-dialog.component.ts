@@ -1,11 +1,6 @@
-import {Component, Inject} from '@angular/core';
-import { CommonModule } from '@angular/common';
-import {OnInit} from '@angular/core';
-import {
-  MAT_DIALOG_DATA,
-  MatDialogRef,
-  MatDialogModule,
-} from '@angular/material/dialog';
+import {Component, Inject, OnInit} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {MAT_DIALOG_DATA, MatDialogModule, MatDialogRef,} from '@angular/material/dialog';
 import {CrudService} from "../../shared/services/crud/crud.service";
 import {MatButtonModule} from "@angular/material/button";
 import {MatSelectModule} from '@angular/material/select';
@@ -29,7 +24,9 @@ export class AddDialogComponent implements OnInit {
     public dialogRef: MatDialogRef<AddDialogComponent>,
     public crudService: CrudService,
     @Inject(MAT_DIALOG_DATA) public data: DialogDataLockAdd
-  ) {}
+  ) {
+  }
+
   lockTypeId: number = 0;
   deviceId: string = '';
   qrCodeContent: string = '';
@@ -80,8 +77,7 @@ export class AddDialogComponent implements OnInit {
         }
       });
       this.dialogRef.close();
-    }
-    else {
+    } else {
       this.data.snackBarSubject.next({
         message: 'Lock with device id ' + this.deviceId + ' already exists',
         dismiss: 'Dismiss',

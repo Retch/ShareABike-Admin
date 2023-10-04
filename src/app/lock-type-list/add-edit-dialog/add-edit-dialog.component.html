@@ -1,40 +1,45 @@
 <h1 mat-dialog-title>{{data.lockTypeElement == undefined ? "Add" : "Edit"}} lock type</h1>
 <div mat-dialog-content class="dialog-content">
-    <p></p>
+  <p></p>
   <form class="example-form">
     <div>
       <mat-form-field class="input-select-item">
         <mat-label>Description</mat-label>
-        <input [(ngModel)]="description" [ngModelOptions]="{standalone: true}" matInput placeholder="Short description of type">
+        <input [(ngModel)]="description" [ngModelOptions]="{standalone: true}" matInput
+               placeholder="Short description of type">
       </mat-form-field>
     </div>
     <div>
       <mat-form-field class="input-select-item">
         <mat-label>Minimum voltage</mat-label>
-        <input [(ngModel)]="minVoltage" [ngModelOptions]="{standalone: true}" type="number" matInput placeholder="Minimum voltage according to the documentation">
+        <input [(ngModel)]="minVoltage" [ngModelOptions]="{standalone: true}" type="number" matInput
+               placeholder="Minimum voltage according to the documentation">
       </mat-form-field>
     </div>
     <div>
       <mat-form-field class="input-select-item">
         <mat-label>Maximum voltage</mat-label>
-        <input [(ngModel)]="maxVoltage" [ngModelOptions]="{standalone: true}" type="number" matInput placeholder="Maximum voltage according to the documentation">
+        <input [(ngModel)]="maxVoltage" [ngModelOptions]="{standalone: true}" type="number" matInput
+               placeholder="Maximum voltage according to the documentation">
       </mat-form-field>
     </div>
     <div>
       <mat-form-field class="input-select-item">
         <mat-label>Minimum csq</mat-label>
-        <input [(ngModel)]="minCsq" [ngModelOptions]="{standalone: true}" type="number" matInput placeholder="Minimum csq according to the documentation">
+        <input [(ngModel)]="minCsq" [ngModelOptions]="{standalone: true}" type="number" matInput
+               placeholder="Minimum csq according to the documentation">
       </mat-form-field>
     </div>
     <div>
       <mat-form-field class="input-select-item">
         <mat-label>Maximum csq</mat-label>
-        <input [(ngModel)]="maxCsq" [ngModelOptions]="{standalone: true}" type="number" matInput placeholder="Maximum csq according to the documentation">
+        <input [(ngModel)]="maxCsq" [ngModelOptions]="{standalone: true}" type="number" matInput
+               placeholder="Maximum csq according to the documentation">
       </mat-form-field>
     </div>
   </form>
 </div>
 <div mat-dialog-actions>
-    <button mat-button (click)="onNoClick()">Cancel</button>
-    <button mat-button cdkFocusInitial>{{data.lockTypeElement == undefined ? "Save" : "Update"}}</button>
+  <button mat-button (click)="onNoClick()">Cancel</button>
+  <button mat-button cdkFocusInitial>{{data.lockTypeElement == undefined ? "Save" : "Update"}}</button>
 </div>

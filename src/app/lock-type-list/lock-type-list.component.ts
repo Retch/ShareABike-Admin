@@ -24,15 +24,15 @@ export class LockTypeListComponent implements OnInit {
   tooltipDelayShow = 500;
 
   constructor(
-      private crudService: CrudService,
-      public dialog: MatDialog
+    private crudService: CrudService,
+    public dialog: MatDialog
   ) {
   }
 
   openAddEditDialog(id = 0): void {
     let lockTypeElement: LockType | undefined;
     if (id != 0) {
-        lockTypeElement = this.lockTypes.find((element: LockType) => element.id === id);
+      lockTypeElement = this.lockTypes.find((element: LockType) => element.id === id);
     }
     const dialogRef = this.dialog.open(AddEditDialogComponent, {
       data: {
@@ -46,8 +46,8 @@ export class LockTypeListComponent implements OnInit {
   ngOnInit(): void {
     this.lockTypeSubscription = this.crudService.lockTypes$.subscribe((locks: LockType[]) => {
       this.lockTypes = locks.sort((a, b) => {
-            return a.id - b.id;
-          }
+          return a.id - b.id;
+        }
       );
     });
     this.crudService.fetchAllLockTypes();

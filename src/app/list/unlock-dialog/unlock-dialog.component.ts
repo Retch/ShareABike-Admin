@@ -1,13 +1,9 @@
-import { CommonModule } from '@angular/common';
-import { Component, Inject } from '@angular/core';
-import { MatButtonModule } from '@angular/material/button';
-import {
-  MAT_DIALOG_DATA,
-  MatDialogRef,
-  MatDialogModule,
-} from '@angular/material/dialog';
-import { CrudService } from 'src/app/shared/services/crud/crud.service';
-import { DialogDataLockBasic } from 'src/app/types/DialogDataLockBasic';
+import {CommonModule} from '@angular/common';
+import {Component, Inject} from '@angular/core';
+import {MatButtonModule} from '@angular/material/button';
+import {MAT_DIALOG_DATA, MatDialogModule, MatDialogRef,} from '@angular/material/dialog';
+import {CrudService} from 'src/app/shared/services/crud/crud.service';
+import {DialogDataLockBasic} from 'src/app/types/DialogDataLockBasic';
 
 @Component({
   selector: 'app-unlock-dialog',
@@ -21,7 +17,8 @@ export class UnlockDialogComponent {
     public dialogRef: MatDialogRef<UnlockDialogComponent>,
     public crudService: CrudService,
     @Inject(MAT_DIALOG_DATA) public data: DialogDataLockBasic
-  ) {}
+  ) {
+  }
 
   onNoClick(): void {
     this.dialogRef.close();

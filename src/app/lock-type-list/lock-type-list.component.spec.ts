@@ -1,6 +1,6 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { LockTypeListComponent } from './lock-type-list.component';
+import {LockTypeListComponent} from './lock-type-list.component';
 
 describe('LockTypeListComponent', () => {
   let component: LockTypeListComponent;

@@ -1,12 +1,12 @@
 import * as L from 'leaflet';
-import { Component, AfterViewInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { Subscription, timer, of } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
-import { CrudService } from '../shared/services/crud/crud.service';
-import { lockCoordinatesToLatLngExpression } from '../shared/utils/gpsUtils';
-import { Lock } from '../types/Lock';
-import { timeStampToDateString } from '../shared/utils/timeUtil';
+import {AfterViewInit, Component} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {of, Subscription, timer} from 'rxjs';
+import {switchMap} from 'rxjs/operators';
+import {CrudService} from '../shared/services/crud/crud.service';
+import {lockCoordinatesToLatLngExpression} from '../shared/utils/gpsUtils';
+import {Lock} from '../types/Lock';
+import {timeStampToDateString} from '../shared/utils/timeUtil';
 
 @Component({
   selector: 'app-map',
@@ -69,7 +69,8 @@ export class MapComponent implements AfterViewInit {
     tiles.addTo(this.map);
   }
 
-  constructor(public crudService: CrudService) {}
+  constructor(public crudService: CrudService) {
+  }
 
   ngOnInit() {
     this.lockSubscription = this.crudService.locks$.subscribe(
@@ -103,64 +104,63 @@ export class MapComponent implements AfterViewInit {
   setMapMarkers(locks: Lock[]) {
     if (this.lockMarkerLayer == null) {
       this.lockMarkerLayer = L.layerGroup().addTo(this.map!);
-    }
-    else {
+    } else {
       this.lockMarkerLayer.clearLayers();
       for (let lock of locks) {
         const position: L.LatLngExpression | null = lockCoordinatesToLatLngExpression(lock);
-            if (position != null) {
-              let icon = this.lockLockedIcon;
-              const isAlerted = lock.lastEvent != null;
-              switch (lock.isLocked) {
-                case true:
-                  icon = isAlerted
-                    ? this.lockAlertLockedIcon
-                    : this.lockLockedIcon;
-                  break;
-                case false:
-                  icon = isAlerted ? this.lockAlertOpenIcon : this.lockOpenIcon;
-                  break;
-                default:
-                  icon = this.lockQuestionIcon;
-              }
-              const marker = L.marker(position, {
-                icon: icon,
-              }).addTo(this.lockMarkerLayer!);
-              marker.bindPopup(
-                '<b>Lock ' +
-                  lock.id +
-                  ' (' +
-                  lock.lockTypeDescription +
-                  ')' +
-                  '</b><br />ID: ' +
-                  lock.deviceId +
-                  '<br />QR Code: ' +
-                  lock.qrCodeContent +
-                  '<br />Battery: ' +
-                  lock.batteryPercentage +
-                  ' %' +
-                  '<br />Cellular Signal Quality: ' +
-                  lock.cellularSignalQualityPercentage +
-                  ' %<br />Last Contact: ' +
-                  timeStampToDateString(lock.lastContactUtcTimestamp ?? 0) +
-                  '<br />Last Position: ' +
-                  timeStampToDateString(lock.lastPositionTimeUtcTimestamp ?? 0) +
-                  '<br />Satellites: ' +
-                  lock.satellites +
-                  '<br />GPS signal: ' +
-                  (lock.noGps ? 'no' : 'yes') +
-                  '<br />' +
-                  (lock.lastEvent != null
-                    ? 'Last event: ' +
-                      lock.lastEvent +
-                      ' (' +
-                      timeStampToDateString(lock.lastEventUtcTimestamp!) +
-                      ')'
-                    : '')
-              );
-            }
+        if (position != null) {
+          let icon = this.lockLockedIcon;
+          const isAlerted = lock.lastEvent != null;
+          switch (lock.isLocked) {
+            case true:
+              icon = isAlerted
+                ? this.lockAlertLockedIcon
+                : this.lockLockedIcon;
+              break;
+            case false:
+              icon = isAlerted ? this.lockAlertOpenIcon : this.lockOpenIcon;
+              break;
+            default:
+              icon = this.lockQuestionIcon;
           }
+          const marker = L.marker(position, {
+            icon: icon,
+          }).addTo(this.lockMarkerLayer!);
+          marker.bindPopup(
+            '<b>Lock ' +
+            lock.id +
+            ' (' +
+            lock.lockTypeDescription +
+            ')' +
+            '</b><br />ID: ' +
+            lock.deviceId +
+            '<br />QR Code: ' +
+            lock.qrCodeContent +
+            '<br />Battery: ' +
+            lock.batteryPercentage +
+            ' %' +
+            '<br />Cellular Signal Quality: ' +
+            lock.cellularSignalQualityPercentage +
+            ' %<br />Last Contact: ' +
+            timeStampToDateString(lock.lastContactUtcTimestamp ?? 0) +
+            '<br />Last Position: ' +
+            timeStampToDateString(lock.lastPositionTimeUtcTimestamp ?? 0) +
+            '<br />Satellites: ' +
+            lock.satellites +
+            '<br />GPS signal: ' +
+            (lock.noGps ? 'no' : 'yes') +
+            '<br />' +
+            (lock.lastEvent != null
+              ? 'Last event: ' +
+              lock.lastEvent +
+              ' (' +
+              timeStampToDateString(lock.lastEventUtcTimestamp!) +
+              ')'
+              : '')
+          );
         }
+      }
+    }
   }
 
   ngAfterViewInit(): void {

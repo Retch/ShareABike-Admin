@@ -1,14 +1,14 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { MatIconModule } from '@angular/material/icon';
-import { MatButtonModule } from '@angular/material/button';
-import { MatInputModule } from '@angular/material/input';
-import { MatCardModule } from '@angular/material/card';
-import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
-import { CrudService } from '../shared/services/crud/crud.service';
-import { AuthService } from '../shared/services/auth/auth.service';
-import { Subscription } from 'rxjs';
+import {Component, OnInit} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {MatIconModule} from '@angular/material/icon';
+import {MatButtonModule} from '@angular/material/button';
+import {MatInputModule} from '@angular/material/input';
+import {MatCardModule} from '@angular/material/card';
+import {FormsModule} from '@angular/forms';
+import {HttpClientModule} from '@angular/common/http';
+import {CrudService} from '../shared/services/crud/crud.service';
+import {AuthService} from '../shared/services/auth/auth.service';
+import {Subscription} from 'rxjs';
 
 
 @Component({
@@ -37,7 +37,8 @@ export class LoginComponent implements OnInit {
   constructor(
     public crudService: CrudService,
     public authService: AuthService
-  ) {}
+  ) {
+  }
 
   ngOnInit() {
     this.authenticatedSubscription = this.authService.authenticated$.subscribe(
@@ -58,6 +59,7 @@ export class LoginComponent implements OnInit {
   login() {
     this.authService
       .loginWithCredentials(this.username, this.password)
-      .subscribe((res) => {});
+      .subscribe((res) => {
+      });
   }
 }

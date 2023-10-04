@@ -1,17 +1,21 @@
-import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { RouterOutlet, RouterModule } from '@angular/router';
-import { LoginComponent } from './login/login.component';
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatIconModule } from '@angular/material/icon';
-import { MatButtonModule } from '@angular/material/button';
-import { HttpClientModule } from '@angular/common/http';
-import { AuthService } from './shared/services/auth/auth.service';
-import { OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {RouterModule, RouterOutlet} from '@angular/router';
+import {LoginComponent} from './login/login.component';
+import {MatToolbarModule} from '@angular/material/toolbar';
+import {MatIconModule} from '@angular/material/icon';
+import {MatButtonModule} from '@angular/material/button';
+import {HttpClientModule} from '@angular/common/http';
+import {AuthService} from './shared/services/auth/auth.service';
 import {Subject, Subscription} from 'rxjs';
-import { ListComponent } from './list/list.component';
-import { MapComponent } from './map/map.component';
-import {MatSnackBar, MatSnackBarModule, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition} from "@angular/material/snack-bar";
+import {ListComponent} from './list/list.component';
+import {MapComponent} from './map/map.component';
+import {
+  MatSnackBar,
+  MatSnackBarHorizontalPosition,
+  MatSnackBarModule,
+  MatSnackBarVerticalPosition
+} from "@angular/material/snack-bar";
 import {SnackBarContent} from "./types/SnackBarContent";
 
 
@@ -46,7 +50,8 @@ export class AppComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private _snackBar: MatSnackBar
-  ) {}
+  ) {
+  }
 
   ngOnInit() {
     this.authenticatedSubscription = this.authService.authenticated$.subscribe(
@@ -78,8 +83,7 @@ export class AppComponent implements OnInit {
     this.authService.logout().subscribe((success) => {
       if (success) {
         window.location.reload();
-      }
-      else {
+      } else {
         this.snackBarSubject.next({
           message: 'Logout not possible',
           dismiss: 'Dismiss',

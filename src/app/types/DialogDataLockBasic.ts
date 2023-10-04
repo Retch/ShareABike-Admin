@@ -1,5 +1,5 @@
-import { SnackBarContent } from "./SnackBarContent";
-import { Subject } from "rxjs";
+import {SnackBarContent} from "./SnackBarContent";
+import {Subject} from "rxjs";
 
 export interface DialogDataLockBasic {
   id: number;

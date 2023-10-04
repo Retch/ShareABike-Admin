@@ -1,6 +1,6 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { UnlockDialogComponent } from './unlock-dialog.component';
+import {UnlockDialogComponent} from './unlock-dialog.component';
 
 describe('UnlockDialogComponent', () => {
   let component: UnlockDialogComponent;

@@ -11,6 +11,7 @@ COPY . .
 RUN ng build --configuration production --output-path=/dist
 
 FROM nginx:alpine
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 COPY --from=build /dist /usr/share/nginx/html
 
 EXPOSE 80

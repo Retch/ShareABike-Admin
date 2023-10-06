@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  admin-ui:
+    image: ghcr.io/retch/shareabike-admin:latest
+    container_name: shareabike-admin
+    environment:
+      API_URL: https://localhost:8000

@@ -34,6 +34,11 @@ export class AuthService {
           {username: username, password: password},
           this.loginOptions
         )
+        .pipe(
+          catchError((err: any) => {
+            return of(err);
+          })
+        )
         .subscribe((response: any) => {
           if (response.status == 200) {
             const newJwt = response.body.token;

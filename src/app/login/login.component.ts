@@ -4,11 +4,18 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatButtonModule} from '@angular/material/button';
 import {MatInputModule} from '@angular/material/input';
 import {MatCardModule} from '@angular/material/card';
+import {
+  MatSnackBar,
+  MatSnackBarHorizontalPosition,
+  MatSnackBarModule,
+  MatSnackBarVerticalPosition,
+} from '@angular/material/snack-bar';
+import { SnackBarContent } from '../types/SnackBarContent';
 import {FormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
 import {CrudService} from '../shared/services/crud/crud.service';
 import {AuthService} from '../shared/services/auth/auth.service';
-import {Subscription} from 'rxjs';
+import {Subject, Subscription} from 'rxjs';
 
 
 @Component({
@@ -22,6 +29,7 @@ import {Subscription} from 'rxjs';
     MatButtonModule,
     MatCardModule,
     FormsModule,
+    MatSnackBarModule,
   ],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
@@ -33,11 +41,23 @@ export class LoginComponent implements OnInit {
   isLoggedIn: boolean = false;
   private authenticatedSubscription: Subscription | undefined;
   Locks: any = [];
+  snackBarHorizontalPosition: MatSnackBarHorizontalPosition = 'end';
+  snackBarVerticalPosition: MatSnackBarVerticalPosition = 'bottom';
+  snackBarDuration = 4000;
+  snackBarSubject = new Subject<SnackBarContent>();
 
   constructor(
     public crudService: CrudService,
-    public authService: AuthService
-  ) {
+    public authService: AuthService,
+    private _snackBar: MatSnackBar
+  ) {}
+
+  openSnackBar(content: string, dismiss: string) {
+    this._snackBar.open(content, dismiss, {
+      horizontalPosition: this.snackBarHorizontalPosition,
+      verticalPosition: this.snackBarVerticalPosition,
+      duration: this.snackBarDuration,
+    });
   }
 
   ngOnInit() {
@@ -46,6 +66,9 @@ export class LoginComponent implements OnInit {
         this.isLoggedIn = auth;
       }
     );
+    this.snackBarSubject.subscribe((data) => {
+      this.openSnackBar(data.message, data.dismiss);
+    });
   }
 
   ngOnDestroy() {
@@ -59,7 +82,13 @@ export class LoginComponent implements OnInit {
   login() {
     this.authService
       .loginWithCredentials(this.username, this.password)
-      .subscribe(() => {
+      .subscribe((test: boolean) => {
+        if (!test) {
+          this.snackBarSubject.next({
+          message: 'Error logging in',
+          dismiss: 'Dismiss',
+        });
+        }
       });
   }
 }

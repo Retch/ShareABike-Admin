@@ -1,15 +1,14 @@
 <div>
   <mat-toolbar color="primary" class="toolbar">
     <span>ShareABike</span>
-    <div>
+    <div *ngIf="isLoggedIn">
       <a mat-button [routerLink]="'/'">Map</a>
       <a mat-button [routerLink]="'/list'">Lock list</a>
       <a mat-button [routerLink]="'/locktypes'">Lock types</a>
     </div>
     <span class="example-spacer"></span>
     <div *ngIf="isLoggedIn">
-      <button (click)="logout()" mat-icon-button class="example-icon favorite-icon"
-              aria-label="Example icon-button with heart icon">
+      <button (click)="logout()" mat-icon-button>
         <mat-icon>logout</mat-icon>
       </button>
     </div>

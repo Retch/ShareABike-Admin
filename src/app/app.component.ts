@@ -17,6 +17,7 @@ import {
   MatSnackBarVerticalPosition
 } from "@angular/material/snack-bar";
 import {SnackBarContent} from "./types/SnackBarContent";
+import {MatTooltipModule} from '@angular/material/tooltip';
 
 
 @Component({
@@ -32,6 +33,7 @@ import {SnackBarContent} from "./types/SnackBarContent";
     MatToolbarModule,
     MatButtonModule,
     MapComponent,
+    MatTooltipModule,
     RouterModule,
     MatSnackBarModule
   ],

@@ -18,9 +18,6 @@ For Omni locks the inputs should be like following:
 ### Create lock
 <img src="documentation/assets/create_lock.webp" alt="Create lock" width="350"/>
 The IMEI is shown in the *BleTool* app and in the adapter logs when the adapter url is set in the lock settings.
-
-<img src="documentation/assets/create_lock.webp" alt="Create lock" width="350"/>
-
 The QR code content is the text in the qr code
 
 <img src="documentation/assets/lock_qr.webp" alt="Create lock" width="350"/>

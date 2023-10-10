@@ -5,11 +5,11 @@
 }
 
 .wrapper {
-  min-height: 100vh;
-  min-width: 100vw;
-  display: flex;
+  display: block;
   align-items: center;
   justify-content: center;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .form-title {
@@ -20,6 +20,7 @@
 .form-outer {
   min-width: 20rem;
   width: 35vw;
+  top: 20vh;
 }
 
 .form-inner {

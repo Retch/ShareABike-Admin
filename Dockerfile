@@ -7,7 +7,7 @@ RUN npm install -g @angular/cli
 WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm install
-COPY angular.json environment.ts tsconfig.json tsconfig.app.json tsconfig.spec.json ./
+COPY angular.json environment.ts tsconfig.json tsconfig.app.json tsconfig.spec.json ngsw-config.json ./
 COPY src/ ./src/
 RUN ng build --configuration production --output-path=/dist
 

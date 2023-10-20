@@ -41,5 +41,5 @@
 </div>
 <div mat-dialog-actions>
   <button mat-button (click)="onNoClick()">Cancel</button>
-  <button mat-button cdkFocusInitial>{{data.lockTypeElement == undefined ? "Save" : "Update"}}</button>
+  <button mat-button (click)="data.lockTypeElement == undefined ? onAddSubmitClick() : onUpdateSubmitClick()" disabled="{{data.lockTypeElement == undefined && description == ''}}">{{data.lockTypeElement == undefined ? "Save" : "Update"}}</button>
 </div>

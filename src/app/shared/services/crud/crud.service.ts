@@ -5,6 +5,8 @@ import {catchError} from 'rxjs/operators';
 import {Lock} from '../../../types/Lock';
 import {AddLock} from "../../../types/AddLock";
 import {LockType} from '../../../types/LockType';
+import {AddLockType} from 'src/app/types/AddLockType';
+import {UpdateLockType} from 'src/app/types/UpdateLockType';
 import {getJwtRequestOptions} from '../auth/jwtHelper';
 import {environment} from 'environment';
 
@@ -25,8 +27,7 @@ export class CrudService {
   locks$ = this.lockSource.asObservable();
   lockTypes$ = this.lockTypeSource.asObservable();
 
-  constructor(private httpClient: HttpClient) {
-  }
+  constructor(private httpClient: HttpClient) {}
 
   fetchAllLocks(): void {
     const options = getJwtRequestOptions();
@@ -48,7 +49,7 @@ export class CrudService {
   }
 
   addLock(lock: AddLock): Observable<boolean> {
-    const options = getJwtRequestOptions("text");
+    const options = getJwtRequestOptions('text');
     return new Observable<boolean>((observer) => {
       if (options != null) {
         this.httpClient
@@ -72,8 +73,83 @@ export class CrudService {
     });
   }
 
+  addLockType(lock: AddLockType): Observable<boolean> {
+    const options = getJwtRequestOptions('text');
+    return new Observable<boolean>((observer) => {
+      if (options != null) {
+        this.httpClient
+          .post(environment.apiUrl + '/api/admin/locktype', lock, options)
+          .pipe(
+            catchError((err: any) => {
+              observer.next(false);
+              observer.complete();
+              return of(err);
+            })
+          )
+          .subscribe(() => {
+            this.fetchAllLockTypes();
+            observer.next(true);
+            observer.complete();
+          });
+      } else {
+        observer.next(false);
+        observer.complete();
+      }
+    });
+  }
+
+  updateLockType(lock: UpdateLockType): Observable<boolean> {
+    const options = getJwtRequestOptions('text');
+    return new Observable<boolean>((observer) => {
+      if (options != null) {
+        this.httpClient
+          .put(environment.apiUrl + '/api/admin/locktype', lock, options)
+          .pipe(
+            catchError((err: any) => {
+              observer.next(false);
+              observer.complete();
+              return of(err);
+            })
+          )
+          .subscribe(() => {
+            this.fetchAllLockTypes();
+            observer.next(true);
+            observer.complete();
+          });
+      } else {
+        observer.next(false);
+        observer.complete();
+      }
+    });
+  }
+
+  deleteLockType(id: number): Observable<boolean> {
+    const options = getJwtRequestOptions('text');
+    return new Observable<boolean>((observer) => {
+      if (options != null) {
+        this.httpClient
+          .delete(environment.apiUrl + '/api/admin/locktype/' + id, options)
+          .pipe(
+            catchError((err: any) => {
+              observer.next(false);
+              observer.complete();
+              return of(err);
+            })
+          )
+          .subscribe(() => {
+            this.fetchAllLockTypes();
+            observer.next(true);
+            observer.complete();
+          });
+      } else {
+        observer.next(false);
+        observer.complete();
+      }
+    });
+  }
+
   deleteLock(id: number): Observable<boolean> {
-    const options = getJwtRequestOptions("text");
+    const options = getJwtRequestOptions('text');
     return new Observable<boolean>((observer) => {
       if (options != null) {
         this.httpClient
